@@ -1,6 +1,7 @@
 package de.asos.pages;
 
 import de.asos.components.FilterComponent;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryPage extends Page{
+public class CategoryPage extends Page {
 
     @FindBy(xpath = "//nav[@class='breadcrumb']//li/a")
     private List<WebElement> breadcrumbItems;
@@ -24,7 +25,6 @@ public class CategoryPage extends Page{
     }
 
     public boolean containsBreadcrumbsItems(String sexCategory, String category) {
-
         List<String> breadcrumbItemNames = getBreadcrumbItemNames();
 
         if (breadcrumbItemNames.contains(sexCategory) && breadcrumbItemNames.contains(category)){
@@ -38,10 +38,11 @@ public class CategoryPage extends Page{
         List<String> result = new ArrayList<String>();
 
         for (WebElement element: breadcrumbItems ){
-
             result.add(element.getText());
         }
+
         result.add(currentBreadcrumb.getText());
+
         return result;
     }
 
@@ -49,4 +50,9 @@ public class CategoryPage extends Page{
         return filterComponent;
     }
 
+    public ProductDetailsPage clickOnFirstProduct() {
+        WebElement element = driver.findElement(By.xpath("id('productlist-results')//div[contains(@class,'results')]/ul/li"));
+        element.click();
+        return new ProductDetailsPage(driver);
+    }
 }

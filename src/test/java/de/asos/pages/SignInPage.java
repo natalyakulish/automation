@@ -1,9 +1,8 @@
 package de.asos.pages;
 
+import de.asos.models.UserDataModel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by natalyakulish on 29.09.17.
@@ -19,21 +18,27 @@ public class SignInPage extends Page{
         return new SignInPage(driver);
     }
 
-    public HomePage registrationByEmail() {
+    public HomePage registrationByEmail(UserDataModel userDataModel) {
+        driver.findElement(By.id("Email")).sendKeys(userDataModel.getEmail());
+        driver.findElement(By.id("FirstName")).sendKeys(userDataModel.getFirstName());
+        driver.findElement(By.id("LastName")).sendKeys(userDataModel.getLastName());
+        driver.findElement(By.id("Password")).sendKeys(userDataModel.getPassword());
+        driver.findElement(By.xpath("//div//option[text()='" + userDataModel.getDate() + "']")).click();
+        driver.findElement(By.xpath("//div//option[text()='" + userDataModel.getMonth() + "']")).click();
+        driver.findElement(By.xpath("//div//option[text()='" + userDataModel.getYear() + "']")).click();
+        driver.findElement(By.xpath("//*[@id='" + userDataModel.getSex() + "']/..")).click();
+        driver.findElement(By.xpath("//div/label[@class='checkbox qa-marketing-label']")).click();
+        driver.findElement(By.xpath("//div/label[@class='checkbox']")).click();
+        driver.findElement(By.id("register")).click();
 
-        this.driver.findElement(By.id("Email")).sendKeys("natalyakulish@gmail.com");
-        this.driver.findElement(By.id("FirstName")).sendKeys("Natalie");
-        this.driver.findElement(By.id("LastName")).sendKeys("Kulish");
-        this.driver.findElement(By.id("Password")).sendKeys("margar1ta27");
-        timeoutSeconds(3);
-        this.driver.findElement(By.xpath("//div//option[text()='27']")).click();
-        this.driver.findElement(By.xpath("//div//option[text()='October']")).click();
-        this.driver.findElement(By.xpath("//div//option[text()='1989']")).click();
-        this.driver.findElement(By.xpath("//*[@id='female']/..")).click();
-        timeoutSeconds(3);
-        this.driver.findElement(By.xpath("//div/label[@class='checkbox qa-marketing-label']")).click();
-        this.driver.findElement(By.xpath("//div/label[@class='checkbox']")).click();
-        this.driver.findElement(By.id("register")).click();
+        return new HomePage(driver);
+    }
+
+    public HomePage signIn(UserDataModel userDataModel) {
+
+        driver.findElement(By.id("EmailAddress")).sendKeys(userDataModel.getEmail());
+        driver.findElement(By.id("Password")).sendKeys(userDataModel.getPassword());
+        driver.findElement(By.id("signin")).click();
 
         return new HomePage(driver);
     }

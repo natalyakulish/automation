@@ -15,24 +15,37 @@ import java.util.logging.Level;
  * Created by natalyakulish on 29.09.17.
  */
 public class WebDriverUtils {
-    public static WebDriver getChromeDriver(){
+
+    private static WebDriver driver;
+
+    public static WebDriver getNewChromeDriver() {
+
         System.setProperty("webdriver.chrome.driver", "/Users/natalyakulish/Downloads/chromedriver");
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments("--disable-extensions");
         chromeOptions.addArguments("test-type");
-//        LoggingPreferences loggingPreferences = new LoggingPreferences();
-//        loggingPreferences.enable(LogType.BROWSER, Level.ALL);
-//        loggingPreferences.enable(LogType.DRIVER, Level.ALL);
-//        loggingPreferences.enable(LogType.CLIENT, Level.ALL);
-
 
         final DesiredCapabilities chrome = DesiredCapabilities.chrome();
         chrome.setPlatform(Platform.MAC);
         chrome.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
-//        chrome.setCapability(CapabilityType.LOGGING_PREFS, loggingPreferences);
 
-        WebDriver driver = new ChromeDriver(chrome);
+        driver = new ChromeDriver(chrome);
         driver.manage().deleteAllCookies();
         return driver;
     }
+
+    public static WebDriver getExistingChromeDriver() {
+        if (driver != null) {
+            return driver;
+        }
+
+        driver = getNewChromeDriver();
+        return driver;
+    }
+
+    public static void closeDriver() {
+        driver.close();
+        driver = null;
+    }
+
 }

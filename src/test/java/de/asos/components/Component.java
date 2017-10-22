@@ -2,6 +2,8 @@ package de.asos.components;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,13 +16,14 @@ public class Component {
         PageFactory.initElements(driver,this);
     }
 
-    public void timeoutSeconds(int howlong){
-        driver.manage().timeouts().implicitlyWait(howlong, TimeUnit.SECONDS);
+    public void timeoutSeconds(int howLong){
+        driver.manage().timeouts().implicitlyWait(howLong, TimeUnit.SECONDS);
     }
 
-    public void timeoutMilliseconds(int howlong){
-        driver.manage().timeouts().implicitlyWait(howlong, TimeUnit.MILLISECONDS);
+    protected void waitFor(ExpectedCondition expectedCondition) {
+        new FluentWait<WebDriver>(driver)
+                .pollingEvery(1, TimeUnit.SECONDS)
+                .withTimeout(5, TimeUnit.SECONDS)
+                .until(expectedCondition);
     }
-
-
 }

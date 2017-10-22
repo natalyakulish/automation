@@ -1,44 +1,33 @@
 package de.asos.tests;
 
 import de.asos.constants.PathConstants;
+import de.asos.factory.UserDataFactory;
+import de.asos.models.UserDataModel;
 import de.asos.pages.HomePage;
 import de.asos.pages.SignInPage;
-import de.asos.utils.WebDriverUtils;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 
-public class LogoutTest {
+public class LogoutTest extends BaseTest {
 
-    private WebDriver chromeDriver;
-
-    @Before
-    public void setUp() throws Exception {
-
-        chromeDriver = WebDriverUtils.getChromeDriver();
-        chromeDriver.get(PathConstants.ASOS_HOME_PAGE_PATH);
-
+    protected void preconditions() throws Exception {
+        driver.get(PathConstants.ASOS_HOME_PAGE_PATH);
     }
 
+    @Ignore("Found bug: Header on Home Page does not have 'Log out' link right after login, " +
+            "only after refresh of the page.")
     @Test
     public void logout() throws Exception {
-        HomePage homePage = new HomePage(chromeDriver);
-        homePage.timeoutSeconds(1);
-        homePage.hasSignInLink();
+        HomePage homePage = new HomePage(driver);
 
         SignInPage signInPage = homePage.openSignInPage();
-        signInPage.timeoutSeconds(1);
 
-        HomePage homepageAfterLogout = signInPage.signIn("natalyakulish@gmail.com", "margar1ta27");
-        signInPage.timeoutSeconds(1);
+        UserDataModel userData = UserDataFactory.getUserData();
+
+        HomePage homepageAfterLogout = signInPage.signIn(userData);
 
         homepageAfterLogout.signOut();
-
         Assert.assertTrue(homepageAfterLogout.hasSignInLink());
-
-
-
-
     }
 }

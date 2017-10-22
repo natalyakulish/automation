@@ -1,39 +1,34 @@
 package de.asos.tests;
 
 import de.asos.constants.PathConstants;
+import de.asos.factory.UserDataFactory;
+import de.asos.models.UserDataModel;
 import de.asos.pages.HomePage;
+import de.asos.pages.MyAccountPage;
 import de.asos.pages.SignInPage;
-import de.asos.utils.WebDriverUtils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 
-public class SignInTest {
+public class SignInTest extends BaseTest{
 
-
-    private WebDriver chromeDriver;
-
-    @Before
-    public void setUp() throws Exception {
-        chromeDriver = WebDriverUtils.getChromeDriver();
-        chromeDriver.get(PathConstants.ASOS_HOME_PAGE_PATH);
-
+    protected void preconditions() throws Exception {
+        driver.get(PathConstants.ASOS_HOME_PAGE_PATH);
     }
 
     @Test
     public void signIn() throws Exception {
-        HomePage homePage = new HomePage(chromeDriver);
-        homePage.timeoutSeconds(1);
+        HomePage homePage = new HomePage(driver);
 
         SignInPage signInPage = homePage.openSignInPage();
-        signInPage.timeoutSeconds(1);
+        UserDataModel userData = UserDataFactory.getExistingUserData();
 
-        HomePage homePageAfterSignIn = signInPage.signIn("natalyakulish@gmail.com", "margar1ta27");
-        homePageAfterSignIn.timeoutSeconds(1);
+        HomePage homePageAfterSignIn = signInPage.signIn(userData);
 
-        Assert.assertTrue(homePageAfterSignIn.hasSignOutLink());
+        MyAccountPage myAccountPage = homePageAfterSignIn.openMyAccountPage();
 
+        String fullName = userData.getFullName();
 
+        Assert.assertTrue(myAccountPage.getPageUrl().contains("my-account"));
+        Assert.assertTrue(myAccountPage.containsGreeting(fullName));
     }
 }
