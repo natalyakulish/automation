@@ -2,10 +2,8 @@ package de.asos.components;
 
 import de.asos.exceptions.FilterPanelNotExistsException;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,22 +18,18 @@ public class FilterComponent extends Component {
     @FindBy(xpath = "//div[@class='panel']")
     private List<WebElement> filterPanels;
 
+
+    @FindBy(xpath = "//div[@class='noUi-handle noUi-handle-lower']")
+    private WebElement leftSlider;
+
+    @FindBy(xpath = "//div[@class='noUi-handle noUi-handle-upper']")
+    private WebElement rightSlider;
+
+    @FindBy(xpath = "//div[@class='noUi-base']")
+    private  WebElement slider;
+
     public FilterComponent(WebDriver driver) {
         super(driver);
-    }
-
-    public FilterComponent filterByPrice(int expectedMinPrice, int expectedMaxPrice) { //TODO fix
-        timeoutSeconds(2);
-        System.out.println("--------------");
-        System.out.println("Processing min price:");
-//        processPriceSlider(expectedMinPrice, By.id("userMin"), By.xpath("//div[@class='noUi-handle noUi-handle-lower']"));
-
-        System.out.println("--------------");
-        System.out.println("Processing max price:");
-//        processPriceSlider(expectedMaxPrice, By.id("userMax"), By.xpath("//div[@class='noUi-handle noUi-handle-upper']"));
-
-        return new FilterComponent(driver);
-
     }
 
     public int getSelectedMinPrice() {
@@ -114,6 +108,17 @@ public class FilterComponent extends Component {
             }
         }
         return result;
+    }
+
+
+    public FilterComponent checkProductPrice(int left, int right) throws Exception {
+        waitForVisibility(By.xpath("//div[@class='noUi-handle noUi-handle-lower']"));
+       int widthSliderBar = slider.getSize().width;
+        System.out.println("widthSliderBar = " + widthSliderBar);
+        Actions sliderAction = new Actions(driver);
+        sliderAction.dragAndDropBy(rightSlider,-50,0).build().perform();
+
+        return new FilterComponent(driver);
     }
 
     private class FilterPanelComponent {

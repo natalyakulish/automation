@@ -3,11 +3,13 @@ package de.asos.pages;
 import de.asos.models.UserDataModel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * Created by natalyakulish on 29.09.17.
  */
 public class SignInPage extends Page{
+
 
     public SignInPage(WebDriver driver) {
         super(driver);
@@ -50,5 +52,12 @@ public class SignInPage extends Page{
         driver.findElement(By.id("signin")).click();
 
         return new HomePage(driver);
+    }
+
+    public String displayErrorMassage() {
+
+        waitForVisibility(By.xpath("//div[@class='error-block']/ul/li"));
+        WebElement element = driver.findElement(By.xpath("//div[@class='error-block']/ul/li"));
+        return element.getText();
     }
 }

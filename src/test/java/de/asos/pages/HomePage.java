@@ -1,10 +1,14 @@
 package de.asos.pages;
 
+import de.asos.constants.PathConstants;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
+
+import java.util.List;
 
 /**
  * Created by natalyakulish on 29.09.17.
@@ -53,6 +57,36 @@ public class HomePage extends Page {
                 .click(categoryElement)
                 .build()
                 .perform();
+
         return new CategoryPage(driver);
+    }
+
+    public HomePage refreshPage() {
+        WebElement element = driver.findElement(By.xpath("//div[@id='signedin']//a[@class='sign-out']"));
+                element.sendKeys(Keys.F5);
+        driver.navigate().refresh();
+        timeoutSeconds(2);
+        return new HomePage(driver);
+
+    }
+
+    public void openHelpPage(String link) {
+
+        List<WebElement> linksList = driver.findElements(By.xpath("//ul[@class='my-details']/li/a"));
+        for (WebElement linkInTheList : linksList){
+            String linkInTheListText = linkInTheList.getText();
+            if (linkInTheListText.equals(link)){
+                linkInTheList.click();
+                break;
+            }else {
+                throw new IllegalArgumentException(linkInTheList + "is not a valid link");
+            }
+        }
+
+    }
+
+    public BagPage openBagPage() {
+        driver.findElement(By.xpath("//li[@id='miniBagApp']/div")).click();
+            return new BagPage(driver);
     }
 }

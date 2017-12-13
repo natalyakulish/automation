@@ -27,7 +27,14 @@ public class WebDriverUtils {
 
         final DesiredCapabilities chrome = DesiredCapabilities.chrome();
         chrome.setPlatform(Platform.MAC);
-        chrome.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("-incognito");
+        options.addArguments("start-maximized");
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+
+
 
         driver = new ChromeDriver(chrome);
         driver.manage().deleteAllCookies();
@@ -35,17 +42,16 @@ public class WebDriverUtils {
     }
 
     public static WebDriver getExistingChromeDriver() {
-        if (driver != null) {
-            return driver;
+        if (driver == null) {
+            driver = getNewChromeDriver();
         }
-
-        driver = getNewChromeDriver();
         return driver;
     }
 
     public static void closeDriver() {
-        driver.close();
-        driver = null;
+        if (driver != null) {
+            driver.close();
+            driver = null;
+        }
     }
-
 }

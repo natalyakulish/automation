@@ -28,7 +28,7 @@ public class FilterProductsTest extends BaseTest {
 
         Assert.assertEquals(filter.findCheckedCheckboxes(), filter.findPanelsWithCheckboxes());
 
-        ProductDetailsPage productDetailsPage = categoryPage.clickOnFirstProduct();
+        ProductDetailsPage productDetailsPage = categoryPage.clickOnFirstProduct(1);
         productDetailsPage.selectFirstAvailableSize().addToBag();
 
         Assert.assertTrue(productDetailsPage.hasMinibagOverlayContainer());

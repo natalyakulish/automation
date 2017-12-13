@@ -50,8 +50,8 @@ public class CategoryPage extends Page {
         return filterComponent;
     }
 
-    public ProductDetailsPage clickOnFirstProduct() {
-        WebElement element = driver.findElement(By.xpath("id('productlist-results')//div[contains(@class,'results')]/ul/li"));
+    public ProductDetailsPage clickOnFirstProduct(int index) {
+        WebElement element = driver.findElement(By.xpath("id('productlist-results')//div[contains(@class,'results')]//li[" + index + "]"));
         element.click();
         return new ProductDetailsPage(driver);
     }

@@ -22,6 +22,10 @@ public class Page {
         timeoutSeconds(5);
     }
 
+    public Page() {
+
+    }
+
     public void timeoutSeconds(int howlong) {
         driver.manage().timeouts().implicitlyWait(howlong, TimeUnit.SECONDS);
     }
@@ -34,12 +38,17 @@ public class Page {
                 .until(expectedCondition);
     }
 
-    protected void waitForDisplayed(By locator) {
+    protected void waitForVisibility(By locator) {
         waitForIgnoring(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
+    protected void waitForPresence(By locator) {
+        waitForIgnoring(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+    }
+
+
     public String getPageUrl() {
-       return driver.getCurrentUrl();
+        return driver.getCurrentUrl();
     }
 }
 
